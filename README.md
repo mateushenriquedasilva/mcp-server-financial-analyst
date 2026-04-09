@@ -1,107 +1,76 @@
-# Financial Analyst MCP Server
+# MCP Server Financial Analyst
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![FastMCP](https://img.shields.io/badge/FastMCP-Server-0A0A0A)](https://github.com/jlowin/fastmcp)
-[![Yahoo Finance](https://img.shields.io/badge/Data-Yahoo%20Finance-6001D2)](https://pypi.org/project/yfinance/)
+A FastMCP server for financial analysis using Yahoo Finance data.
 
-Servidor MCP (Model Context Protocol) para analise financeira, construido com FastMCP e alimentado por dados do Yahoo Finance via `yfinance`.
+## Overview
 
-## Why This Project
-
-Este servidor expoe capacidades financeiras prontas para uso em clientes MCP:
-
-- Tool para preco em tempo real
-- Resource estruturado com metricas de mercado
-- Prompt para gerar resumo financeiro rapido
+This project implements an MCP-compatible server that exposes financial analysis capabilities to MCP clients. It uses Python and integrates with Yahoo Finance for market data retrieval.
 
 ## Features
 
-| Capability | Nome | Entrada | Saida |
-| --- | --- | --- | --- |
-| Tool | `get_stock_price` | `ticker: str` | `float` |
-| Resource | `stock://{ticker}` | `ticker` na URI | JSON serializado |
-| Prompt | `financial_report` | `ticker: str` | `str` |
+- MCP server implementation with FastMCP
+- Financial data lookup and analysis tools
+- Lightweight Python setup
+- Easy integration with MCP-capable clients/editors
 
-Tickers de exemplo: `AAPL`, `MSFT`, `PETR4.SA`.
+## Tech Stack
 
-## Architecture
-
-```mermaid
-flowchart LR
-    Client[MCP Client] -->|Tool / Resource / Prompt| Server[FastMCP Server]
-    Server -->|consulta ticker| YF[yfinance]
-    YF -->|dados de mercado| Yahoo[Yahoo Finance]
-    Server -->|resposta estruturada| Client
-```
+- Python
+- FastMCP
+- yfinance
 
 ## Project Structure
 
-```text
-mcp_server/
-  main.py
-  README.md
-  requirements.txt
-```
+- `main.py`: MCP server entry point and tool definitions
+- `requirements.txt`: Python dependencies
+- `README.md`: setup and usage documentation
 
-## Requirements
+## Prerequisites
 
 - Python 3.10+
-- Dependencias em `requirements.txt`
+- pip
 
-## Quickstart
+## Getting Started
 
-1. Criar e ativar ambiente virtual:
+1. Clone the repository:
 
-```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
+```bash
+git clone https://github.com/mateushenriquedasilva/mcp-server-financial-analyst.git
+cd mcp-server-financial-analyst
 ```
 
-2. Instalar dependencias:
+2. Create and activate a virtual environment:
 
-```powershell
+```bash
+python -m venv .venv
+# Windows PowerShell
+.venv\Scripts\Activate.ps1
+```
+
+3. Install dependencies:
+
+```bash
 pip install -r requirements.txt
 ```
 
-3. Executar o servidor:
+4. Run the MCP server:
 
-```powershell
-fastmcp run main.py
+```bash
+python main.py
 ```
 
-Se `fastmcp` nao estiver no PATH:
+## Example Use Cases
 
-```powershell
-python -m fastmcp run main.py
-```
+- Fetch current stock prices by ticker
+- Build higher-level financial assistant workflows
+- Integrate portfolio insights into MCP clients
 
-## MCP Endpoints
+## Next Steps
 
-### Tool: `get_stock_price(ticker: str) -> float`
+- Add more financial indicators and analytics tools
+- Add caching/rate-limit handling
+- Add automated tests for tool behavior
 
-Busca o preco atual de um ticker. Se o dado nao estiver disponivel, retorna erro explicito.
+## License
 
-### Resource: `stock://{ticker}`
-
-Retorna JSON com os campos:
-
-- `ticker`
-- `currentPrice`
-- `previousClose`
-- `open`
-- `dayHigh`
-- `dayLow`
-
-### Prompt: `financial_report(ticker: str) -> str`
-
-Gera um resumo textual contendo:
-
-- nome da empresa
-- setor
-- industria
-- preco atual
-
-## Notes
-
-- Os dados dependem da disponibilidade da API do Yahoo Finance.
-- Alguns tickers podem nao retornar `currentPrice` dependendo do mercado e horario.
+This project is available under the repository license terms.
