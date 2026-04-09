@@ -1,5 +1,4 @@
 from fastmcp import FastMCP
-from fastmcp.prompts import Message
 import json
 import yfinance as yf
 
@@ -35,3 +34,18 @@ def get_stock_resource(ticker: str) -> str:
         return json.dumps(payload, ensure_ascii=False)
     except Exception as e:
         raise ValueError(f"Error fetching stock resource for {ticker}: {e}")
+    
+@mcp.prompt()
+def financial_report(ticker: str) -> str:
+    """Generate a financial report for a given stock ticker."""
+    try:
+        stock = yf.Ticker(ticker)
+        info = stock.info
+        report = f"Financial Report for {ticker}:\n"
+        report += f"Company Name: {info.get('longName')}\n"
+        report += f"Sector: {info.get('sector')}\n"
+        report += f"Industry: {info.get('industry')}\n"
+        report += f"Current Price: {info.get('currentPrice')}\n"
+        return report
+    except Exception as e:
+        raise ValueError(f"Error generating financial report for {ticker}: {e}")
