@@ -83,10 +83,6 @@ Exemplo de ticker: `AAPL`, `MSFT`, `PETR4.SA`.
 - Entrada: `ticker: str`
 - Retorna texto curto com nome da empresa, setor, industria e preco atual.
 
-## Arquivo Utilitario
-
-`utils/mcp_utils.py` contem uma classe utilitaria para inicializar sessao MCP via SSE e interagir com tools/resources/prompts do servidor.
-
 ## Observacoes
 
 - Os dados dependem da disponibilidade da API do Yahoo Finance.
