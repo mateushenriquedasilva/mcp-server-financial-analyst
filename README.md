@@ -1,89 +1,107 @@
-# MCP Server - Financial Analyst
+# Financial Analyst MCP Server
 
-Servidor MCP (Model Context Protocol) construído com FastMCP para consultas financeiras usando Yahoo Finance (`yfinance`).
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![FastMCP](https://img.shields.io/badge/FastMCP-Server-0A0A0A)](https://github.com/jlowin/fastmcp)
+[![Yahoo Finance](https://img.shields.io/badge/Data-Yahoo%20Finance-6001D2)](https://pypi.org/project/yfinance/)
 
-## Visao Geral
+Servidor MCP (Model Context Protocol) para analise financeira, construido com FastMCP e alimentado por dados do Yahoo Finance via `yfinance`.
 
-Este projeto expoe capacidades financeiras via MCP:
+## Why This Project
 
-- Tool: `get_stock_price(ticker)`
-- Resource: `stock://{ticker}`
-- Prompt: `financial_report(ticker)`
+Este servidor expoe capacidades financeiras prontas para uso em clientes MCP:
 
-Com isso, um cliente MCP pode consultar preco de acao em tempo real, ler um recurso estruturado com dados basicos e gerar um pequeno relatorio financeiro.
+- Tool para preco em tempo real
+- Resource estruturado com metricas de mercado
+- Prompt para gerar resumo financeiro rapido
 
-## Estrutura
+## Features
+
+| Capability | Nome | Entrada | Saida |
+| --- | --- | --- | --- |
+| Tool | `get_stock_price` | `ticker: str` | `float` |
+| Resource | `stock://{ticker}` | `ticker` na URI | JSON serializado |
+| Prompt | `financial_report` | `ticker: str` | `str` |
+
+Tickers de exemplo: `AAPL`, `MSFT`, `PETR4.SA`.
+
+## Architecture
+
+```mermaid
+flowchart LR
+    Client[MCP Client] -->|Tool / Resource / Prompt| Server[FastMCP Server]
+    Server -->|consulta ticker| YF[yfinance]
+    YF -->|dados de mercado| Yahoo[Yahoo Finance]
+    Server -->|resposta estruturada| Client
+```
+
+## Project Structure
 
 ```text
 mcp_server/
   main.py
+  README.md
   requirements.txt
-  utils/
-    mcp_utils.py
 ```
 
-## Requisitos
+## Requirements
 
 - Python 3.10+
 - Dependencias em `requirements.txt`
 
-## Instalacao
+## Quickstart
 
-1. Crie e ative um ambiente virtual:
+1. Criar e ativar ambiente virtual:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 ```
 
-2. Instale as dependencias:
+2. Instalar dependencias:
 
 ```powershell
 pip install -r requirements.txt
 ```
 
-## Execucao
-
-Com o ambiente ativo:
+3. Executar o servidor:
 
 ```powershell
 fastmcp run main.py
 ```
 
-Se o comando `fastmcp` nao estiver no PATH, use:
+Se `fastmcp` nao estiver no PATH:
 
 ```powershell
 python -m fastmcp run main.py
 ```
 
-## API MCP Disponivel
+## MCP Endpoints
 
-### Tool
+### Tool: `get_stock_price(ticker: str) -> float`
 
-- Nome: `get_stock_price`
-- Entrada: `ticker: str`
-- Saida: `float`
+Busca o preco atual de um ticker. Se o dado nao estiver disponivel, retorna erro explicito.
 
-Exemplo de ticker: `AAPL`, `MSFT`, `PETR4.SA`.
+### Resource: `stock://{ticker}`
 
-### Resource
+Retorna JSON com os campos:
 
-- URI template: `stock://{ticker}`
-- Retorna JSON com campos como:
-  - `ticker`
-  - `currentPrice`
-  - `previousClose`
-  - `open`
-  - `dayHigh`
-  - `dayLow`
+- `ticker`
+- `currentPrice`
+- `previousClose`
+- `open`
+- `dayHigh`
+- `dayLow`
 
-### Prompt
+### Prompt: `financial_report(ticker: str) -> str`
 
-- Nome: `financial_report`
-- Entrada: `ticker: str`
-- Retorna texto curto com nome da empresa, setor, industria e preco atual.
+Gera um resumo textual contendo:
 
-## Observacoes
+- nome da empresa
+- setor
+- industria
+- preco atual
+
+## Notes
 
 - Os dados dependem da disponibilidade da API do Yahoo Finance.
 - Alguns tickers podem nao retornar `currentPrice` dependendo do mercado e horario.
